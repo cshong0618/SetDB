@@ -1,8 +1,8 @@
 package setdb
 
 type ByteUnit struct {
-	b byte
-	next map[byte]*ByteUnit
+	next   map[byte]*ByteUnit
+	b      byte
 	exists bool
 }
 
