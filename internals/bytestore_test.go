@@ -1,4 +1,4 @@
-package setdb
+package internals
 
 import (
 	"github.com/google/uuid"

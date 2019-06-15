@@ -1,4 +1,4 @@
-package setdb
+package internals
 
 import (
 	"log"
@@ -25,10 +25,7 @@ func (db *DB) Put(bs []byte) {
 	root := db.root
 
 	for _, b := range bs {
-		if _, ok := root.next[b]; !ok {
-			root.next[b] = InitByteUnit(b)
-		}
-		root = root.next[b]
+		root = root.Put(b)
 	}
 	root.Set()
 }
@@ -40,10 +37,12 @@ func (db *DB) PutString(s string) {
 func (db DB) Find(bs []byte) bool {
 	root := db.root
 	for _, b := range bs {
-		next, ok := root.next[b]
-		if !ok {
+		next := root.Find(b)
+
+		if next == nil {
 			return false
 		}
+
 		root = next
 	}
 
@@ -62,6 +61,12 @@ func MemUsage() {
 	log.Printf("\tTotalAlloc = %v MiB", bToMb(m.TotalAlloc))
 	log.Printf("\tSys = %v MiB", bToMb(m.Sys))
 	log.Printf("\tNumGC = %v\n", m.NumGC)
+
+	log.Printf("\n")
+	log.Printf("\tHeap alloc = %v MiB\n", bToMb(m.HeapAlloc))
+	log.Printf("\tHeap inuse = %v MiB\n", bToMb(m.HeapInuse))
+	log.Printf("\tHeap objects = %v\n", m.HeapObjects)
+
 }
 
 func bToMb(b uint64) uint64 {
