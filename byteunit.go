@@ -7,11 +7,10 @@ type ByteUnit struct {
 }
 
 func InitByteUnit(b byte) *ByteUnit {
-	bu := ByteUnit{}
-	bu.b = b
-	bu.next = make(map[byte]*ByteUnit)
-
-	return &bu
+	return &ByteUnit{
+		b:    b,
+		next: make(map[byte]*ByteUnit),
+	}
 }
 
 func InitAndSetByteUnit(b byte) *ByteUnit {
@@ -19,6 +18,15 @@ func InitAndSetByteUnit(b byte) *ByteUnit {
 	byteUnit.Set()
 
 	return byteUnit
+}
+
+func (bu *ByteUnit) Put(b byte) *ByteUnit {
+	if nbu, ok := bu.next[b]; ok {
+		return nbu
+	} else {
+		bu.next[b] = InitByteUnit(b)
+		return bu.next[b]
+	}
 }
 
 func (bu ByteUnit) Find(b byte) *ByteUnit {
