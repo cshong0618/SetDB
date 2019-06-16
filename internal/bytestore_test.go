@@ -1,4 +1,4 @@
-package setdb
+package internal
 
 import (
 	"github.com/google/uuid"
@@ -10,14 +10,14 @@ import (
 )
 
 func TestInit(t *testing.T) {
-	db := Init()
+	db := InitDB()
 
 	assert.Equal(t, byte(0), db.root.b)
 	assert.Equal(t, false, db.root.exists)
 }
 
 func TestDB_Find(t *testing.T) {
-	setdb := Init()
+	setdb := InitDB()
 
 	tests := []struct {
 		input    []byte
@@ -35,9 +35,9 @@ func TestDB_Find(t *testing.T) {
 }
 
 func BenchmarkDB_PutString_Memory(b *testing.B) {
-	setdb := Init()
+	setdb := InitDB()
 
-	loops := 1000000
+	loops := 10000000
 
 	b.StartTimer()
 	for i := 0; i < loops; i++ {
@@ -50,7 +50,7 @@ func BenchmarkDB_PutString_Memory(b *testing.B) {
 }
 
 func BenchmarkDB_PutString(b *testing.B) {
-	setdb := Init()
+	setdb := InitDB()
 
 	uuids := uuid.New()
 
@@ -75,7 +75,7 @@ func TestDB_Items(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		setdb := Init()
+		setdb := InitDB()
 
 		for i := 0; i < test.loops; i++ {
 			ids := xid.New()

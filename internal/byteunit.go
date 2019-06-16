@@ -1,4 +1,4 @@
-package setdb
+package internal
 
 type ByteUnit struct {
 	next   map[byte]*ByteUnit

@@ -1,4 +1,4 @@
-package setdb
+package internal
 
 import (
 	"github.com/stretchr/testify/assert"

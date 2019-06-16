@@ -1,4 +1,4 @@
-package setdb
+package internal
 
 import (
 	"log"
@@ -15,7 +15,7 @@ type DB struct {
 
 // Root is always 0.
 // Uses its map to hold actual value
-func Init() *DB {
+func InitDB() *DB {
 	db := DB{}
 	db.root = InitByteUnit(byte(0))
 	db.writeMutex = &sync.Mutex{}
@@ -57,6 +57,10 @@ func (db DB) Find(bs []byte) bool {
 	}
 
 	return root.exists
+}
+
+func (db DB) FindString(s string) bool {
+	return db.Find([]byte(s))
 }
 
 func (db DB) Size() uintptr {
